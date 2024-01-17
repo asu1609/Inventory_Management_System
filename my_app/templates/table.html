@@ -1,0 +1,17 @@
+<div class="box-nav d-flex justify-between">
+    <table class="table table-striped table-responsive table-bordered">
+        <thead class="table-dark">
+            <tr>
+                {%for column in columns %}
+                {%if column == 'id' %}
+                <th>Sr.No.</th>
+                {%elif column == 'price'%}
+                <th>Price <sub>(in INR)</sub></th>
+                {%else%}
+                <th>{{' '.join(column.split('_')).capitalize()}}</th>
+                {%endif%}
+                {%endfor%}
+                <th>Actions</th>
+            </tr>
+        </thead>
+       

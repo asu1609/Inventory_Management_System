@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Flash Message -->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Add Button-->
+{% include 'add_button.html' %}
+ 
+<!-- Table -->
+{% if products %}
+  {% include 'table.html' %}
+      <tbody>
+        {%for product in products %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{product.product_name}}</td>
+          <td>{{product.brand_name}}</td>
+          <td>{{product.price}}</td>
+          <td>
+            <a href="#" class="link-dark" data-bs-toggle="modal" data-bs-target="#updateModal{{product.id}}">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+            <a href="/delete_product/{{product.id}}" class="link-dark">
+              <i class="bi bi-trash-fill"></i>
+            </a>
+        </td>
+        </tr>
+
+        <!-- Update Product form --> 
+<div class="modal fade" id="updateModal{{product.id}}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Fill the below form to update product</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form class="row g-3" action="/update_product/{{product.id}}" method="POST">
+          {{ form.csrf_token }}
+          <div class="col-md-6">
+            {{form.product_name.label(class='form-label')}}
+            {{form.product_name(class='form-control', value = product.product_name)}}
+          </div>
+          <div class="col-md-6">
+            {{form.brand_name.label(class='form-label')}}
+            {{form.brand_name(class='form-control', value = product.brand_name)}}
+          </div>
+          <div class="col-md-6">
+            {{form.price.label(class='form-label')}}
+            {{form.price(class='form-control', value = product.price )}}
+          </div>
+          <div class="col-12">
+            {{form.update(class='btn btn-primary')}}
+          </div>
+        </form>
+      </div>
+  
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+  
+    </div>
+  </div>
+</div> 
+
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+
+{% else %}
+
+<!-- No Records -->
+<div class="alert alert-dark" role="alert">
+  No Records. Add your product.
+</div>
+
+{% endif %}
+
+<!-- Add Product form-->
+<div class="modal fade" id="myProductModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+            <h4 class="modal-title">Fill the below form to add product</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+    <!-- Modal body -->
+    <div class="modal-body">
+      <form class="row g-3" action="/product" method="POST">
+        {{ form.csrf_token }}
+        <div class="col-md-6">
+          {{form.product_name.label(class='form-label')}}
+          {{form.product_name(class='form-control')}}
+        </div>
+        <div class="col-md-6">
+          {{form.brand_name.label(class='form-label')}}
+          {{form.brand_name(class='form-control')}}
+        </div>
+        <div class="col-md-6">
+          {{form.price.label(class='form-label')}}
+          {{form.price(class='form-control')}}
+        </div>
+        <div class="col-12">
+          {{form.add(class='btn btn-primary')}}
+        </div>
+      </form>
+    </div>
+  
+    <!-- Modal footer -->
+    <div class="modal-footer">
+      <button type ="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+  
+  </div>
+</div>
+</div>  
+
+</div>
+
+ 
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container p-4 d-flex justify-content-evenly">
+    <div class="card p-2 mb-2 text-white" style="width: 12rem; background-color: rgb(6, 124, 228);">
+        <h1 class="text-center pt-4">{{product_count}}</h1>
+        <div class="card-body">
+          <h5 class="card-title text-center">Total Products</h5>
+          <p class="card-text">Click on view details to see products at each location.</p>
+          <a href="/product_details" class="btn btn-secondary">View Details</a>
+        </div>
+      </div>
+      <div class="card p-2 mb-2  text-white" style="width: 12rem; background-color: rgb(6, 124, 228);">
+        <h1 class="text-center pt-4">{{location_count}}</h1>
+        <div class="card-body">
+          <h5 class="card-title text-center">Total Locations</h5>
+          <p class="card-text">Click on view details to see locations.</p>
+          <a href="/location_details" class="btn btn-secondary">View Details</a>
+        </div>
+      </div>
+</div>
+
+{% endblock %}

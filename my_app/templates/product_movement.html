@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{message}}</strong><a href="/product" class="alert-link"></a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% include 'add_button.html' %}
+{%if movements %}
+  {% include 'table.html' %}
+      <tbody>
+        {%for movement in movements %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{movement.from_location.capitalize()}}</td>
+          <td>{{movement.to_location.capitalize()}}</td>
+          <td>{{movement.time_stamp}}</td>
+          <td>{{movement.product_id}}</td>
+          <td>{{movement.product_name}}</td>
+          <td>{{movement.quantity}}</td>
+          <td>
+            <a href="" class="link-dark" data-bs-toggle="modal" data-bs-target="#updateModal{{movement.id}}"> <i class="bi bi-pencil-square"></i></a>
+            <a href="/delete_movement/{{movement.id}}" class="link-dark" onclick="return confirm('Are you sure to delete?')"><i class="bi bi-trash-fill"></i></a>
+        </td>
+        <div class="modal fade" id="updateModal{{movement.id}}">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Fill the below form to update movement</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+        
+              <!-- Modal body -->
+              <div class="modal-body">
+                <form class="row g-3" action="/update_movement/{{movement.id}}" method="POST">
+                  {{ form.csrf_token }}
+                  <div class="col-md-6">
+                    {{form.from_location.label(class='form-label')}}
+                    {{form.from_location(class='form-control', value = movement.from_location)}}
+                  </div>
+                  <div class="col-md-6">
+                    {{form.to_location.label(class='form-label')}}
+                    {{form.to_location(class='form-control', value = movement.to_location)}}
+                  </div>
+                  <div class="col-md-6">
+                    {{form.product_name.label(class='form-label')}}
+                    {{form.product_name(class='form-control', value = movement.product_name)}}
+                  </div>
+                  <div class="col-md-6">
+                    {{form.quantity.label(class='form-label')}}
+                    {{form.quantity(class='form-control', value = movement.quantity)}}
+                </div>
+                  <div class="col-12">
+                    {{form.update(class='btn btn-primary')}}
+                  </div>
+                </form>
+              </div>
+        
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </div> 
+
+{% else %}
+
+<div class="alert alert-dark" role="alert">
+  No Records. Add your movement.
+</div>
+
+{% endif %}
+
+<!-- Add movement form -->
+  <div class="modal fade" id="myMovementModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Fill the below form to add movement</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form class="row g-3" action="/product_movement" method="POST">
+            {{ form.csrf_token }}
+            <div class="col-md-6">
+              {{form.from_location.label(class='form-label',for='from_location')}}
+              <select name="from_location" id="from_location" class="form-control">
+                <option value=""></option>
+                {% for location in locations %}
+                <option value={{location.location_name}}>{{location.location_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              {{form.to_location.label(class='form-label', for='to_location')}}
+              <select name="to_location" id="to_location" class="form-control">
+                <option value=""></option>
+                {% for location in locations %}
+                <option value={{location.location_name}}>{{location.location_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              {{form.product_name.label(class='form-label', for='product_name')}}
+              <select name="product_name" id="product_name" class="form-control">
+                {% for product in products %}
+                <option value="{{product.product_name}}">{{product.product_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              {{form.quantity.label(class='form-label')}}
+              {{form.quantity(class='form-control')}}
+          </div>
+            <div class="col-12">
+              {{form.add(class='btn btn-primary')}}
+            </div>
+          </form>
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

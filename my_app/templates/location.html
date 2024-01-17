@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% include 'add_button.html' %}
+   
+{% if locations %}
+{%include 'table.html'%}
+<tbody>
+  {%for location in locations %}
+  {% set my_dict = {"key": "value"} %}
+  {{ my_dict.key }}
+
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{location.location_name}}</td>
+          <td>{{location.address}}</td>
+          <td>
+            <a href="" class="link-dark" data-bs-toggle="modal" data-bs-target="#updateModal{{location.id}}"> <i class="bi bi-pencil-square"></i></a>
+            <a href="/delete_location/{{location.id}}" class="link-dark"><i class="bi bi-trash-fill"></i></a>
+          </td>
+        </tr>
+
+        <!-- Add Location form-->
+        <div class="modal fade" id="updateModal{{location.id}}">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Fill the below form to update location</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+          
+              <!-- Modal body -->
+              <div class="modal-body">
+                <form class="row g-3" action="/update_location/{{location.id}}" method="POST">
+                  {{ form.csrf_token }}
+                  <div class="col-md-6">
+                    {{form.location_name.label(class='form-label')}}
+                    {{form.location_name(class='form-control', value = location.location_name)}}
+                  </div>
+                  <div class="col-12">
+                    {{form.address.label(class='form-label')}}
+                    {{form.address(class='form-control', value = "{{location.address}}")}}
+                  </div>
+                  <div class="col-12">
+                    {{form.update(class='btn btn-primary')}}
+                  </div>
+                </form>
+              </div>
+          
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+          
+            </div>
+          </div>
+        </div>
+
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+
+{% else %}
+
+<div class="alert alert-dark" role="alert">
+  No Records. Add your location.
+</div>
+
+{% endif %}
+
+<!-- Add Location form-->
+  <div class="modal fade" id="myLocationModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Fill the below form to add location</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+    
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form class="row g-3" action="/location" method="POST">
+            {{ form.csrf_token }}
+            <div class="col-md-6">
+              {{form.location_name.label(class='form-label')}}
+              {{form.location_name(class='form-control')}}
+            </div>
+            <div class="col-12">
+              {{form.address.label(class='form-label')}}
+              {{form.address(class='form-control')}}
+            </div>
+            <div class="col-12">
+              {{form.add(class='btn btn-primary')}}
+            </div>
+          </form>
+        </div>
+    
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
