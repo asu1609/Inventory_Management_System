@@ -38,8 +38,8 @@ This Flask-based web application is designed to efficiently manage the inventory
 
     
 **Installation**
-1. Clone the Repository: git clone https://github.com/your_username/inventory-management-web-app.git
-2. cd inventory-management-web-app
+1. Clone the Repository: git clone https://github.com/asu1609/inventory_management_system.git
+2. cd inventory_management_system
 3. Create a Virtual Environment (Optional but Recommended)
    
    python -m venv venv
